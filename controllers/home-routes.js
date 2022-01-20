@@ -4,7 +4,7 @@ const { Post, User, Comment } = require("../models");
 
 router.get("/", (req, res) => {
 	console.log(req.session);
-
+	console.log("home-route");
 	Post.findAll({
 		attributes: [
 			"id",
@@ -107,6 +107,11 @@ router.get("/post/:id", (req, res) => {
 			console.log(err);
 			res.status(500).json(err);
 		});
+});
+
+router.get("/graph", function (req, res) {
+	console.log("in graph route");
+	res.render("homepage");
 });
 
 module.exports = router;
