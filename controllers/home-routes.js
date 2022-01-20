@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const sequelize = require("../config/connection");
-const { Post, User, Comment } = require("../models");
+const { Post, User, Comment, Vote } = require("../models");
 
 router.get("/", (req, res) => {
 	console.log(req.session);
@@ -36,8 +36,8 @@ router.get("/", (req, res) => {
 		.then((dbPostData) => {
 			const posts = dbPostData.map((post) => post.get({ plain: true }));
 			// pass data to template
-			res.render("single-post", {
-				post,
+			res.render("homepage", {
+				posts,
 				loggedIn: req.session.loggedIn,
 			});
 		})
@@ -109,9 +109,9 @@ router.get("/post/:id", (req, res) => {
 		});
 });
 
-router.get("/graph", function (req, res) {
-	console.log("in graph route");
-	res.render("homepage");
-});
+// router.get("/graph", function (req, res) {
+// 	console.log("in graph route");
+// 	res.render("homepage");
+// });
 
 module.exports = router;
