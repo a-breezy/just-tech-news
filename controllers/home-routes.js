@@ -2,9 +2,9 @@ const router = require("express").Router();
 const sequelize = require("../config/connection");
 const { Post, User, Comment, Vote } = require("../models");
 
+// get all posts for homepage
 router.get("/", (req, res) => {
-	console.log(req.session);
-	console.log("home-route");
+	console.log("======================");
 	Post.findAll({
 		attributes: [
 			"id",
@@ -35,7 +35,7 @@ router.get("/", (req, res) => {
 	})
 		.then((dbPostData) => {
 			const posts = dbPostData.map((post) => post.get({ plain: true }));
-			// pass data to template
+
 			res.render("homepage", {
 				posts,
 				loggedIn: req.session.loggedIn,
@@ -47,15 +47,7 @@ router.get("/", (req, res) => {
 		});
 });
 
-router.get("/login", (req, res) => {
-	if (req.session.loggedIn) {
-		res.redirect("/");
-		return;
-	}
-
-	res.render("login");
-});
-
+// get single post
 router.get("/post/:id", (req, res) => {
 	Post.findOne({
 		where: {
@@ -94,10 +86,8 @@ router.get("/post/:id", (req, res) => {
 				return;
 			}
 
-			// serialize the data
 			const post = dbPostData.get({ plain: true });
 
-			// pass data to template
 			res.render("single-post", {
 				post,
 				loggedIn: req.session.loggedIn,
@@ -109,9 +99,13 @@ router.get("/post/:id", (req, res) => {
 		});
 });
 
-// router.get("/graph", function (req, res) {
-// 	console.log("in graph route");
-// 	res.render("homepage");
-// });
+router.get("/login", (req, res) => {
+	if (req.session.loggedIn) {
+		res.redirect("/");
+		return;
+	}
+
+	res.render("login");
+});
 
 module.exports = router;
